@@ -1,0 +1,29 @@
+name: Daily Stats Tracker
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  collect-stats:
+    runs-on: ubuntu-latest
+    environment: ENV_VARS
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - run: python main.py
+        env:
+          PB_DB_HOST: ${{ secrets.PB_DB_HOST }}
+          PB_DB_NAME: ${{ secrets.PB_DB_NAME }}
+          PB_DB_USER: ${{ secrets.PB_DB_USER }}
+          PB_DB_PASSWORD: ${{ secrets.PB_DB_PASSWORD }}
+          PB_DB_PORT: ${{ secrets.PB_DB_PORT }}
+          PB_DB_TABLE_NAME: ${{ secrets.PB_DB_TABLE_NAME }}
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
