@@ -1,4 +1,5 @@
 import os
+import re
 import json
 from datetime import datetime
 
@@ -8,13 +9,25 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 
+def get_db_schema():
+    # Empty (e.g. unset GitHub secret) falls back to the legacy "public" schema
+    schema = os.environ.get("PB_DB_SCHEMA") or "public"
+    if not re.fullmatch(r"[a-z_][a-z0-9_]*", schema):
+        raise ValueError(
+            f"Invalid PB_DB_SCHEMA {schema!r}: must match ^[a-z_][a-z0-9_]*$"
+        )
+    return schema
+
+
 def get_db_stats():
+    schema = get_db_schema()
     conn = psycopg2.connect(
         host=os.environ["PB_DB_HOST"],
         database=os.environ["PB_DB_NAME"],
         user=os.environ["PB_DB_USER"],
         password=os.environ["PB_DB_PASSWORD"],
         port=os.environ["PB_DB_PORT"],
+        options=f"-c search_path={schema}",
     )
     cur = conn.cursor()
     table_name = os.environ["PB_DB_TABLE_NAME"]
