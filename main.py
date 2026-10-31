@@ -4,7 +4,6 @@ import json
 from datetime import datetime
 
 import psycopg2
-from psycopg2 import sql
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -30,14 +29,9 @@ def get_db_stats():
         options=f"-c search_path={schema}",
     )
     cur = conn.cursor()
-    table_name = os.environ["PB_DB_TABLE_NAME"]
 
-    # Number of active matches (rows in the main table)
-    cur.execute(
-        sql.SQL("SELECT COUNT(*) FROM {}").format(
-            sql.Identifier(table_name)
-        )
-    )
+    # Number of active matches (rows of the active_match view, resolved via search_path)
+    cur.execute("SELECT COUNT(*) FROM active_match")
     active_matches = cur.fetchone()[0]
 
     cur.close()
