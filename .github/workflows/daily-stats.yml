@@ -25,6 +25,5 @@ jobs:
           PB_DB_USER: ${{ secrets.PB_DB_USER }}
           PB_DB_PASSWORD: ${{ secrets.PB_DB_PASSWORD }}
           PB_DB_PORT: ${{ secrets.PB_DB_PORT }}
-          PB_DB_TABLE_NAME: ${{ secrets.PB_DB_TABLE_NAME }}
           PB_DB_SCHEMA: ${{ secrets.PB_DB_SCHEMA }}
           GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}

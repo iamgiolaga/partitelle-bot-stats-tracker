@@ -4,7 +4,7 @@ Cron job that collects statistics from the [partitelle-bot](https://github.com/i
 
 ## What it does
 
-- Counts **active matches** (rows in the table named by `PB_DB_TABLE_NAME`, e.g. `all_players`)
+- Counts **active matches** (rows of the `active_match` view, resolved through `PB_DB_SCHEMA`)
 - Appends a row with a timestamp to Google Sheets on each run
 
 ## Environment Variables
@@ -18,7 +18,6 @@ Cron job that collects statistics from the [partitelle-bot](https://github.com/i
 | `PB_DB_USER`       | Database user      |
 | `PB_DB_PASSWORD`   | Database password  |
 | `PB_DB_PORT`       | Database port      |
-| `PB_DB_TABLE_NAME` | Matches table name |
 | `PB_DB_SCHEMA`     | Postgres schema of the matches table, e.g. `prod` (optional; default `public`) |
 
 ### Google Sheets
@@ -42,7 +41,6 @@ The workflow runs daily at 10:00 CEST via `.github/workflows/daily-stats.yml`. Y
    - `PB_DB_USER`
    - `PB_DB_PASSWORD`
    - `PB_DB_PORT`
-   - `PB_DB_TABLE_NAME`
    - `PB_DB_SCHEMA` (optional, e.g. `prod`; defaults to `public`)
    - `GOOGLE_CREDENTIALS_JSON` (paste the full Service Account JSON)
 3. Push to `main` and the workflow will run on schedule
